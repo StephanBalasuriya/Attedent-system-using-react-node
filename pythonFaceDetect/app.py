@@ -1,31 +1,16 @@
 import os  #os module provides functions to interact with the operating system - file/directory operations, environment variables, process management, etc.
 from fastapi import FastAPI
 from dotenv import load_dotenv
+from routes.api_routes import router
 
 import uvicorn
 
 load_dotenv()
 
-from camera import capture_frame
-from faceEngine import extract_face_encoding
-
 app = FastAPI(title="Face AI Service")
 
-@app.get("/capture-face")
-def capture_face():
-    try:
-        frame = capture_frame()
-        if frame is None:
-            return {"error": "Camera frame not available"}
-
-        encoding = extract_face_encoding(frame)
-        if encoding is None:
-            return {"error": "No single face detected"}
-
-        return {"encoding": encoding}
-
-    except Exception as e:
-        return {"error": str(e)}
+# Include routes
+app.include_router(router)
 
 # Add the startup logic at the bottom
 if __name__ == "__main__":
