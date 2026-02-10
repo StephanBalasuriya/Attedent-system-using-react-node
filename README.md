@@ -9,11 +9,14 @@ frontend
 npm create vite@latest frontend 
 npm install axios react-router-dom
 
+pip install -r requirements.txt
 pip install fastapi uvicorn 
 pip install opencv-python 
 pip install cmake 
-pip install dlib-19.24.1-cp311-cp311-win_amd64.whl
+# Skip dlib wheel on Linux - install via system package manager or pip
+pip install dlib  # On Linux, this compiles from source (requires cmake, build-essential)
 pip install face-recognition
+pip install face-recognition-models  # Add this line
 pip install numpy python-dotenv
 
 pip install fastapi uvicorn sqlalchemy asyncpg python-dotenv
