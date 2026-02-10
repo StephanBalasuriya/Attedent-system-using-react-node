@@ -2,9 +2,16 @@ import cv2
 import threading
 import time
 
+# class CameraThread:
+#     def __init__(self, camera_index=0):
+#         self.cap = cv2.VideoCapture(camera_index, cv2.CAP_DSHOW)
+#         self.frame = None
+#         self.running = False
+#         self.lock = threading.Lock()
+
 class CameraThread:
     def __init__(self, camera_index=0):
-        self.cap = cv2.VideoCapture(camera_index, cv2.CAP_DSHOW)
+        self.cap = cv2.VideoCapture(camera_index)  # Remove CAP_DSHOW
         self.frame = None
         self.running = False
         self.lock = threading.Lock()
