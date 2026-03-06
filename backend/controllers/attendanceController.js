@@ -117,12 +117,12 @@ const scanAttendance = async (_req, res) => {
         `INSERT INTO attendance (user_id, status, message)
          VALUES ($1, $2, $3)
          RETURNING id, user_id, status, message, captured_at`,
-        [null, "failed", "Face detected, but the user was not recognised."]
+        [null, "failed", "Face detected, but the user was not recognized."]
       );
 
       return res.json({
         status: "failed",
-        message: "Face detected, but the user was not recognised.",
+        message: "Face detected, but the user was not recognized.",
         previewImage: capture.previewImage || null,
         attendance: mapAttendanceRow(failedAttendance.rows[0]),
       });

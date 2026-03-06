@@ -1,4 +1,4 @@
-# Attedent-system-using-react-node
+# Attendance system using React, Node, and Python
 
 This project combines:
 

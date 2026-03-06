@@ -12,6 +12,14 @@ const initialFormState = {
   department: '',
 }
 
+const getErrorMessage = (error, fallbackMessage) => {
+  if (error instanceof TypeError) {
+    return 'Backend service unavailable. Start the Node and Python services to enable live attendance.'
+  }
+
+  return error.message || fallbackMessage
+}
+
 const formatDateTime = (value) => {
   if (!value) {
     return '—'
@@ -27,6 +35,10 @@ const statusClassName = (status) => {
 
   if (status === 'failed') {
     return 'badge badge-failed'
+  }
+
+  if (status === 'offline') {
+    return 'badge badge-offline'
   }
 
   return 'badge badge-waiting'
@@ -59,6 +71,10 @@ function App() {
       return 'Face detected, but attendance failed'
     }
 
+    if (attendanceStatus.status === 'offline') {
+      return 'Backend connection required'
+    }
+
     return 'Camera is on and waiting for a face'
   }, [attendanceStatus.status])
 
@@ -77,7 +93,7 @@ function App() {
     } catch (error) {
       setFormMessage({
         type: 'error',
-        text: error.message,
+        text: getErrorMessage(error, 'Unable to load users.'),
       })
     } finally {
       setLoadingUsers(false)
@@ -98,8 +114,8 @@ function App() {
       setAttendance(data.attendance || [])
     } catch (error) {
       setAttendanceStatus({
-        status: 'failed',
-        message: error.message,
+        status: 'offline',
+        message: getErrorMessage(error, 'Unable to load attendance.'),
       })
     } finally {
       setLoadingAttendance(false)
@@ -128,8 +144,8 @@ function App() {
       }
     } catch (error) {
       setAttendanceStatus({
-        status: 'failed',
-        message: error.message,
+        status: 'offline',
+        message: getErrorMessage(error, 'Unable to scan attendance.'),
       })
       setCameraPreview(null)
     }
@@ -193,7 +209,7 @@ function App() {
     } catch (error) {
       setFormMessage({
         type: 'error',
-        text: error.message,
+        text: getErrorMessage(error, 'Unable to add the user.'),
       })
     } finally {
       setSubmittingUser(false)
