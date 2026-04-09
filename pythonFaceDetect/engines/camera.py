@@ -6,14 +6,16 @@ load_dotenv()
 
 
 def capture_frame():
-    print("33333333333333333333")
     camera_index = int(os.getenv("CAMERA_DEVICE_INDEX", 0))
-    cap = cv2.VideoCapture(camera_index)  # Let OpenCV auto-detect backend on Linux
+    cap = cv2.VideoCapture(camera_index)
+
     if not cap.isOpened():
         return None
 
     ret, frame = cap.read()
-    cap.release()  # release immediately
+    cap.release()
+
     if not ret or frame is None:
         return None
+
     return frame

@@ -1,11 +1,18 @@
 const express = require("express");
-const router = express.Router();
-const multer = require("multer");
+const rateLimit = require("express-rate-limit");
 const userController = require("../controllers/userController");
 
-const upload = multer({ dest: "uploads/" });
+const router = express.Router();
+const userRateLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  limit: 20,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: "Too many user requests. Please wait a moment and try again." },
+});
 
-// Enroll user + face image
-router.post("/enroll", upload.single("face"), userController.enrollUser);
+router.get("/", userRateLimiter, userController.listUsers);
+router.post("/", userRateLimiter, userController.createUser);
+router.post("/enroll", userRateLimiter, userController.enrollUser);
 
 module.exports = router;
